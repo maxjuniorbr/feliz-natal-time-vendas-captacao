@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Natal - Time 2025</title>
+    <style>
+        :root {
+            --page-pad: clamp(12px, 2.5vh, 20px);
+            --fit-scale: 1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a472a 0%, #2d5a3d 50%, #0f2921 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: var(--page-pad);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes snowfall {
+            0% {
+                transform: translateY(-10vh) translateX(0) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(110vh) translateX(100px) rotate(360deg);
+                opacity: 0.3;
+            }
+        }
+
+        .snowflake {
+            position: absolute;
+            top: -10vh;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.5em;
+            animation: snowfall linear infinite;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .snowflake .flake {
+            display: inline-block;
+            will-change: transform;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f0f;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .card-wrap {
+            transform: scale(var(--fit-scale));
+            transform-origin: center;
+            will-change: transform;
+        }
+
+        .card {
+            background: white;
+            max-width: 1300px;
+            width: 95%;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 1s ease-out;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) rotateY(-10deg);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) rotateY(0deg);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #c41e3a 0%, #165b33 100%);
+            padding: 30px 40px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .header::before {
+            content: '{ }';
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 2em;
+            opacity: 0.3;
+            font-family: monospace;
+            animation: pulse 2s infinite;
+        }
+
+        .header::after {
+            content: '</>';
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 2em;
+            opacity: 0.3;
+            font-family: monospace;
+            animation: pulse 2s infinite 1s;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.6;
+                transform: scale(1.1);
+            }
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: wiggle 1s ease-in-out 1s;
+        }
+
+        @keyframes wiggle {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(-5deg);
+            }
+
+            75% {
+                transform: rotate(5deg);
+            }
+        }
+
+        .header .subtitle {
+            font-size: 1.25em;
+            opacity: 0.95;
+            font-family: 'Courier New', monospace;
+        }
+
+        .content {
+            padding: 40px 50px;
+            flex: 1;
+            display: flex;
+            gap: 40px;
+            align-items: stretch;
+        }
+
+        .image-container {
+            text-align: center;
+            position: relative;
+            flex: 0 0 40%;
+            display: flex;
+            align-items: center;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            max-height: 100%;
+            object-fit: contain;
+            object-position: center;
+            border-radius: 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .image-container img:hover {
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        .message {
+            color: #333;
+            line-height: 1.85;
+            font-size: 1.22em;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .message p {
+            margin-bottom: 18px;
+            text-align: justify;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: revealText 0.8s ease-out forwards;
+        }
+
+        .message p:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .message p:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .message p:nth-child(3) {
+            animation-delay: 0.8s;
+        }
+
+        .message p:nth-child(4) {
+            animation-delay: 1.1s;
+        }
+
+        @keyframes revealText {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .greeting {
+            font-weight: bold;
+            color: #165b33;
+            font-size: 1.35em;
+            margin-bottom: 12px !important;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #ffd700 0%, #ffed4e 100%);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .highlight:hover {
+            transform: scale(1.15) rotate(-2deg);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.6);
+            filter: brightness(1.1);
+        }
+
+        .signature {
+            text-align: center;
+            margin-top: auto;
+            padding-top: 22px;
+            border-top: 2px solid #165b33;
+            color: #165b33;
+            font-size: 1.4em;
+            font-weight: bold;
+            opacity: 0;
+            animation: revealText 0.8s ease-out 1.4s forwards;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 18px 20px;
+            text-align: center;
+            color: #666;
+            font-size: 1em;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .code-decoration {
+            font-family: 'Courier New', monospace;
+            color: #c41e3a;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .code-decoration:hover {
+            color: #165b33;
+            transform: scale(1.15);
+            display: inline-block;
+            filter: drop-shadow(0 0 8px rgba(22, 91, 51, 0.6));
+        }
+
+        .particle {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            animation: particleFloat 2s ease-out forwards;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0);
+            }
+        }
+
+        .firework {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        @keyframes fireworkExplode {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(var(--fx), var(--fy));
+            }
+        }
+
+        .confetti-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b6b, #ffd93d);
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            animation: bounce 2s infinite;
+        }
+
+        .confetti-btn:hover {
+            transform: scale(1.2) rotate(15deg);
+            box-shadow: 0 8px 30px rgba(255, 107, 107, 0.5);
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .content {
+                padding: 15px;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .image-container {
+                flex: 0 0 auto;
+            }
+
+            .image-container img {
+                max-height: 30vh;
+            }
+
+            .message {
+                font-size: 0.9em;
+                line-height: 1.6;
+            }
+
+            .confetti-btn {
+                width: 50px;
+                height: 50px;
+                bottom: 20px;
+                right: 20px;
+                font-size: 1.2em;
+            }
+
+            html,
+            body {
+                padding-bottom: 80px;
+                display: block;
+                height: auto;
+                min-height: 100vh;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <button class="confetti-btn" onclick="createConfetti()" title="Clique para soltar confetes! 🎉">🎉</button>
+
+    <div class="card-wrap" id="cardWrap">
+        <div class="card" id="card">
+            <div class="header">
+                <h1>🎄 Feliz Natal! 🎅</h1>
+                <div class="subtitle">// Mensagem especial para o Time Vendas Captação</div>
+            </div>
+
+            <div class="content">
+                <div class="image-container">
+                    <img src="time-2025.png" alt="Time 2025" onclick="imageClick(this)">
+                </div>
+
+                <div class="message">
+                    <p class="greeting">Time,</p>
+
+                    <p>Se o nosso ano fosse um <span class="highlight">repositório</span>, ele seria aquele com o
+                        histórico de commits mais bonito que já vimos. Passamos por deploys críticos, refinamos o
+                        backlog da vida e, o mais importante: rodamos liso, sem travar na hora do aperto.</p>
+
+                    <p>Entre uma entrega de <span class="highlight">valor real</span> para as vendas e um ajuste fino na
+                        captação, o que mais brilhou foi o nosso suporte mútuo. Obrigado por serem o <span
+                            class="highlight">'Stack Overflow'</span> uns dos outros e por manterem o clima tão leve que
+                        até o bug mais complexo parecia feature.</p>
+
+                    <p>Que o nosso descanso tenha <span class="highlight">zero latência</span> e que 2026 venha com um
+                        <span class="code-decoration">git pull</span> de muitas alegrias e novos desafios. Vocês são
+                        craques!
+                    </p>
+
+                    <div class="signature">🎁 Boas festas e vamos com tudo! 🚀</div>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p>✨ Dezembro de 2025 ✨</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getPagePadPx() {
+            const raw = getComputedStyle(document.documentElement).getPropertyValue('--page-pad').trim();
+            const value = parseFloat(raw);
+            return Number.isFinite(value) ? value : 16;
+        }
+
+        function fitCardToViewport() {
+            if (window.innerWidth <= 768) {
+                document.documentElement.style.setProperty('--fit-scale', '1');
+                return;
+            }
+
+            const card = document.getElementById('card');
+            if (!card) return;
+
+            document.documentElement.style.setProperty('--fit-scale', '1');
+
+            const pad = getPagePadPx();
+            const availableW = Math.max(320, window.innerWidth - pad * 2);
+            const availableH = Math.max(320, window.innerHeight - pad * 2);
+
+            const cardW = card.offsetWidth;
+            const cardH = card.offsetHeight;
+
+            if (!cardW || !cardH) return;
+
+            const scale = Math.min(availableW / cardW, availableH / cardH, 1);
+            document.documentElement.style.setProperty('--fit-scale', String(scale));
+        }
+
+        let fitRaf = 0;
+        function scheduleFit() {
+            cancelAnimationFrame(fitRaf);
+            fitRaf = requestAnimationFrame(fitCardToViewport);
+        }
+
+        window.addEventListener('resize', scheduleFit, { passive: true });
+        window.addEventListener('orientationchange', scheduleFit, { passive: true });
+        window.addEventListener('load', () => {
+            requestAnimationFrame(() => requestAnimationFrame(fitCardToViewport));
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (Math.random() > 0.95) createParticle(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (Math.random() > 0.90) {
+                const touch = e.touches[0];
+                createParticle(touch.clientX, touch.clientY);
+            }
+        }, { passive: true });
+
+        function createParticle(x, y) {
+            const colors = ['#ff6b6b', '#ffd93d', '#6bcf7f', '#4d96ff', '#ee5a6f'];
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * 100 + 50;
+            particle.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
+            particle.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
+
+            document.body.appendChild(particle);
+            setTimeout(() => particle.remove(), 2000);
+        }
+
+        function initSnowflakes() {
+            for (let i = 0; i < 30; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                snowflake.innerHTML = '<span class="flake">❄</span>';
+                snowflake.style.left = Math.random() * 100 + '%';
+                snowflake.style.animationDuration = (Math.random() * 5 + 8) + 's';
+                snowflake.style.animationDelay = (Math.random() * 5) + 's';
+                document.body.appendChild(snowflake);
+            }
+        }
+        initSnowflakes();
+
+        function createConfetti() {
+            if (window.SoundFX) SoundFX.celebration();
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-10px';
+                confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                confetti.style.animation = `confettiFall ${Math.random() * 2 + 1}s linear forwards`;
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+
+        function imageClick(img) {
+            if (window.SoundFX) SoundFX.sparkle();
+            img.style.transform = 'scale(1.1) rotate(5deg)';
+            setTimeout(() => img.style.transform = '', 300);
+
+            const rect = img.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    createFirework(
+                        centerX + (Math.random() - 0.5) * 200,
+                        centerY + (Math.random() - 0.5) * 200
+                    );
+                }, i * 100);
+            }
+        }
+
+        function createFirework(x, y) {
+            const colors = ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'firework';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.background = color;
+
+                const angle = (Math.PI * 2 * i) / 20;
+                const distance = Math.random() * 100 + 50;
+
+                particle.style.setProperty('--fx', Math.cos(angle) * distance + 'px');
+                particle.style.setProperty('--fy', Math.sin(angle) * distance + 'px');
+
+                particle.style.animation = 'fireworkExplode 1s ease-out forwards';
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 1000);
+            }
+        }
+
+        document.querySelectorAll('.highlight').forEach(el => {
+            el.addEventListener('click', (e) => {
+                // Som sutil ao clicar
+                if (window.SoundFX) SoundFX.click();
+
+                const terms = ['Deploy com sucesso!', 'LGTM', 'Code Review Aprovado', 'Merge Request Aceito', 'Café quentinho'];
+                const text = terms[Math.floor(Math.random() * terms.length)];
+
+                const toast = document.createElement('div');
+                toast.textContent = text;
+                toast.style.cssText = `
+                    position: fixed;
+                    left: ${e.clientX}px;
+                    top: ${e.clientY - 30}px;
+                    background: #333;
+                    color: white;
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                    z-index: 10000;
+                    animation: revealText 0.5s ease-out forwards;
+                `;
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 2000);
+            });
+        });
+
+        // Sons sutis usando Web Audio API
+        const SoundFX = (function () {
+            let audioContext = null;
+
+            function getContext() {
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                return audioContext;
+            }
+
+            function playTone(frequency, duration, type = 'sine', volume = 0.08) {
+                try {
+                    const ctx = getContext();
+                    const oscillator = ctx.createOscillator();
+                    const gainNode = ctx.createGain();
+
+                    oscillator.connect(gainNode);
+                    gainNode.connect(ctx.destination);
+
+                    oscillator.type = type;
+                    oscillator.frequency.setValueAtTime(frequency, ctx.currentTime);
+
+                    gainNode.gain.setValueAtTime(volume, ctx.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
+
+                    oscillator.start(ctx.currentTime);
+                    oscillator.stop(ctx.currentTime + duration);
+                } catch (e) { }
+            }
+
+            return {
+                click: function () { playTone(400, 0.08, 'square', 0.05); },
+                sparkle: function () {
+                    playTone(800, 0.1, 'sine', 0.06);
+                    setTimeout(() => playTone(1200, 0.1, 'sine', 0.04), 80);
+                },
+                celebration: function () {
+                    [523, 659, 784, 1047].forEach((note, i) => {
+                        setTimeout(() => playTone(note, 0.12, 'sine', 0.08), i * 80);
+                    });
+                }
+            };
+        })();
+
+        window.SoundFX = SoundFX;
+    </script>
+</body>
+
+</html>
